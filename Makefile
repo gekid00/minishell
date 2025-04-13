@@ -6,13 +6,13 @@
 #    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/04/12 16:50:58 by gekido           ###   ########.fr        #
+#    Updated: 2025/04/12 20:41:34 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror 
 INCLUDES = -I./includes
 LIBFT_DIR = ./libft
 
@@ -27,7 +27,7 @@ EXPAND_DIR = $(SRC_DIR)/expand
 SRCS	= $(SRC_DIR)/main.c \
 		$(LEXER_DIR)/lexer.c \
 		$(LEXER_DIR)/lexer_words.c \
-		$(LEXER_DIR)/lexer_lexer_operators.c \
+		$(LEXER_DIR)/lexer_operators.c \
 		$(PARSER_DIR)/parser_core.c \
 		$(PARSER_DIR)/parser_utils.c \
 		$(PARSER_DIR)/parser_ast.c \
@@ -67,5 +67,8 @@ fclean: clean
 	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
+
+dev: re
+	valgrind --suppressions=$(PWD)/readline.supp -s --track-fds=yes --trace-children=yes --show-leak-kinds=all --leak-check=full -q ./minishell
 
 .PHONY: all clean fclean re
