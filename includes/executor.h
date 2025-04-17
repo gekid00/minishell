@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/15 22:52:46 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/18 00:57:28 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 typedef struct s_env
 {
-	char			**vars;
-	unsigned char	exit_code;
+	char	**vars;
+	int		exit_code;
 }					t_env;
 
 t_env	*init_env(char **envp);

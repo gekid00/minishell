@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/15 22:21:47 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 21:58:05 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,16 @@ void	printbanner(void)
 
 void	restore_std_fds(int saved_stdin, int saved_stdout)
 {
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	if (saved_stdin >= 0)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
+	if (saved_stdout >= 0)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
 }
 
 int	is_builtin(char *cmd)

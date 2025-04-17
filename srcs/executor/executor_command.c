@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/15 22:53:11 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/18 00:58:29 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,15 @@
 
 int	execute_ast(t_ast_node *node, t_env *env)
 {
-	int	exit_status;
-
 	if (!node)
 		return (0);
 	if (node->type == NODE_COMMAND)
-		exit_status = execute_command(node, env);
+		env->exit_code = execute_command(node, env);
 	else if (node->type == NODE_PIPE)
-		exit_status = execute_pipe(node, env);
+		env->exit_code = execute_pipe(node, env);
 	else
-		exit_status = 1;
-	return (exit_status);
+		env->exit_code = 1;
+	return (env->exit_code);
 }
 
 int	execute_builtin(char **args, t_env *env)
@@ -68,18 +66,16 @@ int	execute_command(t_ast_node *node, t_env *env)
 {
 	int			saved_stdin;
 	int			saved_stdout;
-	int			exit_status;
 	t_redir		*redirections;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin == -1 || saved_stdout == -1)
+		return (close_fd(saved_stdin, saved_stdout), 1);
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
-	{
-		restore_std_fds(saved_stdin, saved_stdout);
-		return (1);
-	}
-	exit_status = execute_command_node(node, env);
+		return (restore_std_fds(saved_stdin, saved_stdout), close_fd(saved_stdin, saved_stdout), 1);
+	env->exit_code = execute_command_node(node, env);
 	restore_std_fds(saved_stdin, saved_stdout);
-	return (exit_status);
+	return (close_fd(saved_stdin, saved_stdout), env->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 17:17:57 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/18 00:54:07 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ int	main(int argc, char **argv, char **envp)
 		continue_loop = process_input(input, env);
 	}
 	if (g_signal_status >= 256)
-		return (free_env(env), rl_clear_history(), g_signal_status % 256);
-	return (free_env(env), rl_clear_history(), g_signal_status);
+		return (free_env(env), rl_clear_history(), env->exit_code);
+	return (free_env(env), rl_clear_history(), close_fd(STDIN_FILENO, STDOUT_FILENO), env->exit_code);
 }

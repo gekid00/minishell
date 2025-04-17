@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 16:29:57 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 22:57:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@ void	append_to_result(char **result, char c)
 	str[0] = c;
 	str[1] = '\0';
 	temp = ft_strjoin(*result, str);
-	if (temp)
-	{
-		free(*result);
-		*result = temp;
-	}
+	if (!temp)
+		return ;
+	free(*result);
+	*result = temp;
 }
 
 void	process_var_expansion(char *var_name, char **result, t_env *env)

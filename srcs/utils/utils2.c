@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:15:10 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 16:40:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/18 00:24:32 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,3 +45,10 @@ int	process_input(char *input, t_env *env)
 	return (1);
 }
 
+void	close_fd(int fd1, int fd2)
+{
+	if (fd1 != -1)
+		close(fd1);
+	if (fd2 != -1)
+		close(fd2);
+}

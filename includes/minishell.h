@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 16:21:42 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 23:04:57 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int		handle_input(char *input, char **envp);
 void	restore_std_fds(int saved_stdin, int saved_stdout);
 int		should_exit(void);
 int		get_exit_code(void);
-int	process_input(char *input, t_env *env);
+int		process_input(char *input, t_env *env);
 void	handle_command(char *input, t_env *env);
+void	close_fd(int fd1, int fd2);
 
 #endif
