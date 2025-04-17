@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/11 18:24:12 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 17:17:57 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,20 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	t_env	*env;
+	int		continue_loop;
 
 	(void)argc;
 	(void)argv;
 	env = init_env(envp);
 	setup_signals();
 	printbanner();
-	while (1)
+	continue_loop = 1;
+	while (continue_loop)
 	{
 		input = readline("minishell$ ");
-		if (!input)
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (input[0] == '\0')
-		{
-			free(input);
-			continue ;
-		}
-		handle_command(input, env);
-		free(input);
+		continue_loop = process_input(input, env);
 	}
-	return (free_env(env), rl_clear_history(), 0);
+	if (g_signal_status >= 256)
+		return (free_env(env), rl_clear_history(), g_signal_status % 256);
+	return (free_env(env), rl_clear_history(), g_signal_status);
 }

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/11 18:24:37 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/15 22:21:47 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,22 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "unset") == 0
 		|| ft_strcmp(cmd, "env") == 0
 		|| ft_strcmp(cmd, "exit") == 0);
+}
+
+int	is_valid_n_option(char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-')
+		return (0);
+	i = 1;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	if (i > 1)
+		return (1);
+	return (0);
 }

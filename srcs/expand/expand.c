@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 15:30:53 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 16:29:57 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,27 +50,28 @@ void	process_var_expansion(char *var_name, char **result, t_env *env)
 void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 {
 	char	*var_name;
+	char	*temp;
 
 	(*i)++;
-	if (str[*i] == '?' || ft_isdigit(str[*i]))
+	if (str[*i] == '?')
 	{
-		if (str[*i] == '?')
+		temp = ft_itoa(env->exit_code);
+		if (temp)
 		{
-			var_name = ft_itoa(g_signal_status);
-			if (var_name)
-				*result = ft_strjoin_free(*result, var_name);
-			free(var_name);
+			*result = ft_strjoin_free(*result, temp);
+			free(temp);
 		}
 		(*i)++;
 		return ;
 	}
-	if (!ft_isalpha(str[*i]) && str[*i] != '_')
+	if (ft_isdigit(str[*i]))
 	{
-		append_to_result(result, '$');
+		(*i)++;
 		return ;
 	}
-	var_name = extract_var_name(str, i);
-	if (var_name)
+	if (!ft_isalpha(str[*i]) && str[*i] != '_')
+		append_to_result(result, '$');
+	else if ((var_name = extract_var_name(str, i)))
 		process_var_expansion(var_name, result, env);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 19:54:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/15 22:52:46 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	expand_token_variables(t_token *tokens, t_env *env);
 
 int		is_builtin(char *cmd);
 int		is_numeric(const char *str);
-void	restore_std_fds(int stdin_fd, int stdout_fd);
 void	free_args(char **args);
+int		is_valid_n_option(char *arg);
 
 void	setup_signals(void);
 void	sigint_handler(int sig);
