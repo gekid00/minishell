@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/18 00:58:29 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/20 04:02:13 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ int	execute_command(t_ast_node *node, t_env *env)
 		return (close_fd(saved_stdin, saved_stdout), 1);
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
-		return (restore_std_fds(saved_stdin, saved_stdout), close_fd(saved_stdin, saved_stdout), 1);
+		return (restore_std_fds(saved_stdin, saved_stdout), 1);
 	env->exit_code = execute_command_node(node, env);
-	restore_std_fds(saved_stdin, saved_stdout);
-	return (close_fd(saved_stdin, saved_stdout), env->exit_code);
+	return (restore_std_fds(saved_stdin, saved_stdout), env->exit_code);
 }

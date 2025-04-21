@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 23:04:57 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/21 22:38:59 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,7 @@ int		get_exit_code(void);
 int		process_input(char *input, t_env *env);
 void	handle_command(char *input, t_env *env);
 void	close_fd(int fd1, int fd2);
+void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast);
+int		is_unknown_cmd(t_token *tokens, t_env *env);
 
 #endif

@@ -6,13 +6,12 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:05:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 15:44:00 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/20 03:36:32 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* File redirections */
 int	setup_redirection_in(t_redir *redir)
 {
 	int	fd;
