@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redirections.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:05:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/20 03:36:32 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/01 12:42:11 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,25 +78,46 @@ int	setup_redirection_append(t_redir *redir)
 void	handle_heredoc(t_redir *redir)
 {
 	int		fd[2];
+	pid_t	pid;
 	char	*line;
 
 	if (pipe(fd) == -1)
 		return ;
-	while (1)
+	signal(SIGINT, sig_handler);
+	pid = fork();
+	if (pid < 0)
 	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->file) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
-		free(line);
+		close(fd[0]);
+		close(fd[1]);
+		return ;
 	}
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
+		close(fd[0]);
+		while (1)
+		{
+			line = readline("> ");
+			if (!line || ft_strcmp(line, redir->file) == 0)
+			{
+				free(line);
+				break ;
+			}
+			write(fd[1], line, ft_strlen(line));
+			write(fd[1], "\n", 1);
+			free(line);
+		}
+		close(fd[1]);
+		exit(0);
+	}
+	sig_handler(-pid);
 	close(fd[1]);
+	waitpid(pid, NULL, 0);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
+	sig_handler(SIGUSR1);
+	setup_signals();
 }
 
 int	setup_redirections(t_redir *redirects)

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:35:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/12 14:55:36 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/04 04:56:31 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,6 @@ int	env_builtin(t_env *env)
 	return (0);
 }
 
-int	export_builtin(char **args, t_env *env)
-{
-	int	i;
-
-	if (!args[1])
-	{
-		i = 0;
-		while (env->vars[i])
-		{
-			printf("export %s\n", env->vars[i]);
-			i++;
-		}
-		return (0);
-	}
-	i = 1;
-	while (args[i])
-	{
-		add_env_var(env, args[i]);
-		i++;
-	}
-	return (0);
-}
-
 int	unset_builtin(char **args, t_env *env)
 {
 	int	i;
@@ -61,8 +38,7 @@ int	unset_builtin(char **args, t_env *env)
 		j = -1;
 		while (env->vars[++j])
 		{
-			if (ft_strncmp(env->vars[j], args[i], len) == 0
-				&& env->vars[j][len] == '=')
+			if (ft_strncmp(env->vars[j], args[i], len) == 0)
 			{
 				free(env->vars[j]);
 				while (env->vars[j])
@@ -77,24 +53,35 @@ int	unset_builtin(char **args, t_env *env)
 	return (0);
 }
 
+static int	key_len(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	return (i);
+}
+
 void	add_env_var(t_env *env, char *var)
 {
 	int		i;
-	int		len;
-	char	*equal_sign;
+	int		klen;
+	char	*new;
 
-	len = ft_strlen(var);
-	equal_sign = ft_strchr(var, '=');
-	if (equal_sign)
-		len = equal_sign - var;
-	i = find_env_var_index(env->vars, var, len);
-	if (i != -1)
-	{
-		free(env->vars[i]);
-		env->vars[i] = ft_strdup(var);
+	klen = key_len(var);
+	new = ft_strdup(var);
+	if (!new)
 		return ;
+	i = 0;
+	while (env->vars[i])
+	{
+		if (ft_strncmp(env->vars[i], var, klen) == 0
+			&& (env->vars[i][klen] == '\0' || env->vars[i][klen] == '='))
+			return (free(env->vars[i]), (void)(env->vars[i] = new));
+		i++;
 	}
-	allocate_new_env(env, var);
+	env->vars = realloc_env(env->vars, new, i);
 }
 
 void	update_env_var(t_env *env, char *key, char *value)

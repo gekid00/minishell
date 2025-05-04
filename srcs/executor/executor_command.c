@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/20 04:02:13 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/03 18:12:38 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ int	execute_ast(t_ast_node *node, t_env *env)
 
 int	execute_builtin(char **args, t_env *env)
 {
+	if (!args || !args[0])
+		return (1);
+	if (ft_strcmp(args[0], ".") == 0)
+		return (source_builtin(args, env));
 	if (ft_strcmp(args[0], "echo") == 0)
 		return (echo_builtin(args));
 	else if (ft_strcmp(args[0], "cd") == 0)
