@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/03 18:12:38 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/18 22:51:58 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ int	execute_ast(t_ast_node *node, t_env *env)
 
 int	execute_builtin(char **args, t_env *env)
 {
-	if (!args || !args[0])
-		return (1);
-	if (ft_strcmp(args[0], ".") == 0)
-		return (source_builtin(args, env));
 	if (ft_strcmp(args[0], "echo") == 0)
 		return (echo_builtin(args));
 	else if (ft_strcmp(args[0], "cd") == 0)
@@ -56,6 +52,16 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 	args = node->args;
 	if (!args || !args[0])
 		return (0);
+	if (ft_strcmp(args[0], ".") == 0)
+	{
+		ft_putendl_fd(".: filename argument required", 2);
+		return (ft_putendl_fd(".: usage: . filename [arguments]", 2), 2);
+	}
+	if (args[0][0] == '.' && args[0][1] == '.')
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		return (ft_putendl_fd(args[0], 2), 127);
+	}
 	if (is_builtin(args[0]))
 		exit_status = execute_builtin(args, env);
 	else

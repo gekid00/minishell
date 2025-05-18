@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:11:37 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/03 17:49:42 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/17 22:46:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,5 @@ long	ft_atol(char *str);
 char	*get_next_line(int fd);
 int		ft_is_space(char c);
 int		ft_strcmp(char *s1, char *s2);
-size_t	ft_strspn(const char *s, const char *accept);
 
 #	endif

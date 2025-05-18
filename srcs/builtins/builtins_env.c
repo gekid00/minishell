@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:35:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/04 04:56:31 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/18 22:51:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,25 @@ int	env_builtin(t_env *env)
 		i++;
 	}
 	return (0);
+}
+
+static char	**expand_env_tab(char **old, char *new_var, int size)
+{
+	char	**tab;
+	int		j;
+
+	tab = malloc(sizeof(char *) * (size + 2));
+	if (!tab)
+		return (NULL);
+	j = 0;
+	while (j < size)
+	{
+		tab[j] = old[j];
+		j++;
+	}
+	tab[size] = new_var;
+	tab[size + 1] = NULL;
+	return (tab);
 }
 
 int	unset_builtin(char **args, t_env *env)
@@ -68,20 +87,21 @@ void	add_env_var(t_env *env, char *var)
 	int		i;
 	int		klen;
 	char	*new;
+	char	**tab;
 
 	klen = key_len(var);
 	new = ft_strdup(var);
-	if (!new)
-		return ;
 	i = 0;
 	while (env->vars[i])
 	{
 		if (ft_strncmp(env->vars[i], var, klen) == 0
 			&& (env->vars[i][klen] == '\0' || env->vars[i][klen] == '='))
-			return (free(env->vars[i]), (void)(env->vars[i] = new));
+			return (free(env->vars[i]), env->vars[i] = new, (void)0);
 		i++;
 	}
-	env->vars = realloc_env(env->vars, new, i);
+	tab = expand_env_tab(env->vars, new, i);
+	free(env->vars);
+	env->vars = tab;
 }
 
 void	update_env_var(t_env *env, char *key, char *value)

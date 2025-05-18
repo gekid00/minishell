@@ -6,7 +6,7 @@
 #    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/31 10:11:43 by gekido            #+#    #+#              #
-#    Updated: 2025/05/03 17:49:51 by gekido           ###   ########.fr        #
+#    Updated: 2025/04/10 21:59:54 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,6 @@ SRCS	=	ft_putchar.c \
 			get_next_line.c \
 			ft_is_space.c \
 			ft_strcmp.c \
-			ft_strspn.c \
 
 OBJS	=	 ${SRCS:.c=.o}
 

@@ -6,32 +6,11 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 02:50:34 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/04 04:56:56 by gekido           ###   ########.fr       */
+/*   Updated: 2025/04/12 14:55:13 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	source_builtin(char **args, t_env *env)
-{
-	if (!args[1])
-	{
-		ft_putendl_fd("minishell: .: filename argument required", 2);
-		env->exit_code = 2;
-		return (2);
-	}
-	if (args[1][0] == '.' && ft_strspn(args[1], ".") == ft_strlen(args[1]))
-	{
-		ft_putstr_fd("minishell: command not found: ", 2);
-		ft_putendl_fd(args[1], 2);
-		env->exit_code = 127;
-		return (127);
-	}
-	ft_putstr_fd("minishell: .: ", 2);
-	ft_putendl_fd(args[1], 2);
-	env->exit_code = 1;
-	return (1);
-}
 
 void	allocate_new_env(t_env *env, char *var)
 {
@@ -65,21 +44,4 @@ int	find_env_var_index(char **vars, char *var, int len)
 		i++;
 	}
 	return (-1);
-}
-
-char	**realloc_env(char **env, char *new, int count)
-{
-	char	**tab;
-	int		i;
-
-	tab = malloc(sizeof(char *) * (count + 2));
-	if (!tab)
-		return (NULL);
-	i = -1;
-	while (++i < count)
-		tab[i] = env[i];
-	tab[i++] = new;
-	tab[i] = NULL;
-	free(env);
-	return (tab);
 }

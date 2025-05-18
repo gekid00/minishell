@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/03 17:47:15 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/12 12:25:06 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int					setup_redirections(t_redir *redirects);
 int					setup_redirection_in(t_redir *redir);
 int					setup_redirection_out(t_redir *redir);
 int					setup_redirection_append(t_redir *redir);
-void				handle_heredoc(t_redir *redir);
+int					handle_heredoc(t_redir *redir);
 
 int					execute_command(t_ast_node *node, t_env *env);
 int					execute_command_node(t_ast_node *node, t_env *env);
@@ -59,7 +59,6 @@ int					export_builtin(char **args, t_env *env);
 int					unset_builtin(char **args, t_env *env);
 int					env_builtin(t_env *env);
 int					exit_builtin(char **args);
-int					source_builtin(char **args, t_env *env);
 
 void				execute_external(t_ast_node *node, t_env *env);
 void				child_process(t_ast_node *node, t_env *env);
