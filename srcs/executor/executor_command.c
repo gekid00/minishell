@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/18 22:51:58 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ int	execute_ast(t_ast_node *node, t_env *env)
 	if (!node)
 		return (0);
 	if (node->type == NODE_COMMAND)
-		env->exit_code = execute_command(node, env);
+		g_signal_status = execute_command(node, env);
 	else if (node->type == NODE_PIPE)
-		env->exit_code = execute_pipe(node, env);
+		g_signal_status = execute_pipe(node, env);
 	else
-		env->exit_code = 1;
-	return (env->exit_code);
+		g_signal_status = 1;
+	return (g_signal_status);
 }
 
 int	execute_builtin(char **args, t_env *env)
@@ -67,7 +67,7 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 	else
 	{
 		execute_external(node, env);
-		exit_status = env->exit_code;
+		exit_status = g_signal_status;
 	}
 	return (exit_status);
 }
@@ -85,6 +85,6 @@ int	execute_command(t_ast_node *node, t_env *env)
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
 		return (restore_std_fds(saved_stdin, saved_stdout), 1);
-	env->exit_code = execute_command_node(node, env);
-	return (restore_std_fds(saved_stdin, saved_stdout), env->exit_code);
+	g_signal_status = execute_command_node(node, env);
+	return (restore_std_fds(saved_stdin, saved_stdout), g_signal_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:15 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 01:39:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 	(*i)++;
 	if (str[*i] == '?')
 	{
-		temp = ft_itoa(env->exit_code);
+		temp = ft_itoa(g_signal_status);
 		if (temp)
 		{
 			*result = ft_strjoin_free(*result, temp);

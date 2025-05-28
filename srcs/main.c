@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 02:11:37 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		g_signal_status = 0;
+int	g_signal_status = 0;
+
 
 void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast)
 {
@@ -72,7 +73,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!process_input(input, env))
 			break ;
 	}
-	exit_code = env->exit_code;
+	exit_code = g_signal_status;
 	clean_all(env, NULL, NULL);
 	return (exit_code);
 }

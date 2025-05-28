@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_basic.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/01 14:32:07 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:33:37 by rbourkai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,17 @@ int	exit_builtin(char **args)
 
 	ft_putendl_fd("exit", 1);
 	if (!args[1])
-	{
-		g_signal_status = 256;
 		return (0);
-	}
 	if (!is_numeric(args[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		g_signal_status = 256;
 		return (255);
 	}
 	if (args[2])
 		return (ft_putendl_fd("minishell: exit: too many arguments", 2), 1);
 	code = ft_atoi(args[1]) % 256;
-	g_signal_status = 256;
 	return ((int)code);
 }
 

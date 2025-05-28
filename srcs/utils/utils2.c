@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:15:10 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 02:16:57 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/28 15:33:49 by rbourkai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	should_exit(void)
+int	should_exit(t_env *env)
 {
-	if (g_signal_status >= 256)
+	if (env->signal_status >= 256)
 		return (1);
 	return (0);
 }
 
-int	get_exit_code(void)
+int	get_exit_code(t_env *env)
 {
-	if (g_signal_status >= 256)
-		return (g_signal_status % 256);
+	if (env->signal_status >= 256)
+		return (env->signal_status % 256);
 	return (0);
 }
 
@@ -40,7 +40,7 @@ int	process_input(char *input, t_env *env)
 	}
 	handle_command(input, env);
 	free(input);
-	if (g_signal_status >= 256)
+	if (env->signal_status >= 256)
 		return (0);
 	return (1);
 }

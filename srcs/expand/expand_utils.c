@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:02 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/22 01:39:03 by gekido           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ char	*get_env_value(char *var, t_env *env)
 	int	i;
 	int	len;
 
-	/* on caste var pour ft_strcmp, qui prend char * */
 	if (ft_strcmp((char *)var, "?") == 0)
-		return (ft_itoa(env->exit_code));
+		return (ft_itoa(g_signal_status));
 	len = ft_strlen(var);
 	i = 0;
 	while (env->vars[i])
