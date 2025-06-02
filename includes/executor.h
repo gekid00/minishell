@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:17:54 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 typedef struct s_env
 {
 	char			**vars;
-	int				signal_status;
 }					t_env;
 
 int					ft_tablen(char **str);
@@ -59,14 +58,6 @@ int					env_builtin(t_env *env);
 int					exit_builtin(char **args);
 
 void				execute_external(t_ast_node *node, t_env *env);
-void				execute_external_direct(t_ast_node *node, t_env *env);
-int					execute_left_side_direct(t_ast_node *node, t_env *env);
-int					handle_command_node(t_ast_node *node, t_env *env);
-int					handle_nested_pipe_child(t_ast_node *node, t_env *env,
-						int *pipefd);
-int					handle_nested_pipe_parent(t_ast_node *node, t_env *env,
-						int *pipefd, pid_t pid);
-int					handle_pipe_node(t_ast_node *node, t_env *env);
 void				child_process(t_ast_node *node, t_env *env);
 void				parent_process(pid_t pid, t_env *env);
 char				*find_path(char *cmd, char **envp);
@@ -82,12 +73,6 @@ int					is_builtin(char *cmd);
 int					is_numeric(const char *str);
 void				free_args(char **args);
 int					is_valid_n_option(char *arg);
-
-int					should_exit(t_env *env);
-int					get_exit_code(t_env *env);
-int					process_input(char *input, t_env *env);
-void				close_fd(int fd1, int fd2);
-int					is_unknown_cmd(t_token *tokens, t_env *env);
 
 void				setup_signals(void);
 void				sigint_handler(int sig);

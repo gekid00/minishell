@@ -3,30 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   executor_external.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:17:54 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_external_direct(t_ast_node *node, t_env *env)
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+char	**convert_env_to_array(t_env *env)
+{
+	return (env->vars);
+}
+
+void	child_process(t_ast_node *node, t_env *env)
 {
 	char	*path;
-	char	**envp;
 
 	path = find_path(node->args[0], env->vars);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(node->args[0], 2);
-		g_signal_status = 127;
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
 		exit(127);
 	}
-	envp = convert_env_to_array(env);
-	if (execve(path, node->args, envp) == -1)
+	if (execve(path, node->args, env->vars) == -1)
 	{
 		ft_putstr_fd("minishell: error executing: ", 2);
 		ft_putendl_fd(node->args[0], 2);
@@ -34,6 +54,19 @@ void	execute_external_direct(t_ast_node *node, t_env *env)
 		exit(126);
 	}
 	free(path);
+	exit(1);
+}
+
+void	parent_process(pid_t pid, t_env *env)
+{
+	int	status;
+
+	(void)env;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_signal_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_signal_status = 128 + WTERMSIG(status);
 }
 
 void	execute_external(t_ast_node *node, t_env *env)

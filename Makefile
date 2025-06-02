@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+         #
+#    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/05/28 15:56:17 by rbourkai         ###   ########.fr        #
+#    Updated: 2025/05/31 14:17:54 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,9 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(EXECUTOR_DIR)/executor_command.c \
 		$(EXECUTOR_DIR)/executor_heredoc.c \
 		$(EXECUTOR_DIR)/executor_external.c \
-		$(EXECUTOR_DIR)/executor_utils.c \
 		$(EXECUTOR_DIR)/executor_path.c \
 		$(EXECUTOR_DIR)/executor_redirections.c \
 		$(EXECUTOR_DIR)/executor_pipe.c \
-		$(EXECUTOR_DIR)/executor_pipe_utils.c \
 		$(BUILTINS_DIR)/builtins_basic.c \
 		$(BUILTINS_DIR)/builtins_env.c \
 		$(BUILTINS_DIR)/builtins_utils.c \
@@ -61,7 +59,7 @@ $(NAME): $(OBJS)
 	clang $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft $(READLINE_LIBS) -o $(NAME)
 
 %.o: %.c
-	clang $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_DIR) -c $< -o $@
+	clang $(CFLAGS) $(INCLUDES) -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)

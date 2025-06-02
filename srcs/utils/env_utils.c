@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbourkai <rbourkai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 17:20:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/28 18:01:38 by rbourkai         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:17:54 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ t_env	*init_env(char **envp)
 		i++;
 	}
 	env->vars[count] = NULL;
-	g_signal_status = 0;
-	env->signal_status = 0;
 	return (env);
 }
 
