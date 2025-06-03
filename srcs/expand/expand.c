@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:15 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/31 14:17:54 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 	(*i)++;
 	if (str[*i] == '?')
 	{
-		temp = ft_itoa(g_signal_status);
+		temp = ft_itoa(g_signal_status % 256);
 		if (temp)
 		{
 			*result = ft_strjoin_free(*result, temp);
@@ -87,17 +87,28 @@ char	*expand_variables(char *str, t_env *env)
 {
 	char	*result;
 	int		i;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
 
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
 	i = 0;
+	in_single_quotes = false;
+	in_double_quotes = false;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '\'' && !in_double_quotes)
+			in_single_quotes = !in_single_quotes;
+		else if (str[i] == '"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		if (str[i] == '$' && !in_single_quotes)
 			handle_dollar_sign(str, &i, &result, env);
 		else
-			append_to_result(&result, str[i++]);
+		{
+			append_to_result(&result, str[i]);
+			i++;
+		}
 	}
 	return (result);
 }

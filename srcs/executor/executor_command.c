@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/31 14:17:54 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute_ast(t_ast_node *node, t_env *env)
 		g_signal_status = execute_pipe(node, env);
 	else
 		g_signal_status = 1;
-	return (g_signal_status);
+	return (g_signal_status % 256);
 }
 
 int	execute_builtin(char **args, t_env *env)
@@ -40,14 +40,13 @@ int	execute_builtin(char **args, t_env *env)
 	else if (ft_strcmp(args[0], "env") == 0)
 		return (env_builtin(env));
 	else if (ft_strcmp(args[0], "exit") == 0)
-		return (exit_builtin(args));
+		return (exit_builtin(args, env));
 	return (1);
 }
 
 int	execute_command_node(t_ast_node *node, t_env *env)
 {
 	char	**args;
-	int		exit_status;
 
 	args = node->args;
 	if (!args || !args[0])
@@ -63,20 +62,17 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 		return (ft_putendl_fd(args[0], 2), 127);
 	}
 	if (is_builtin(args[0]))
-		exit_status = execute_builtin(args, env);
+		g_signal_status = execute_builtin(args, env);
 	else
-	{
 		execute_external(node, env);
-		exit_status = g_signal_status;
-	}
-	return (exit_status);
+	return (g_signal_status % 256);
 }
 
 int	execute_command(t_ast_node *node, t_env *env)
 {
-	int			saved_stdin;
-	int			saved_stdout;
-	t_redir		*redirections;
+	int		saved_stdin;
+	int		saved_stdout;
+	t_redir	*redirections;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
@@ -86,5 +82,5 @@ int	execute_command(t_ast_node *node, t_env *env)
 	if (setup_redirections(redirections) != 0)
 		return (restore_std_fds(saved_stdin, saved_stdout), 1);
 	g_signal_status = execute_command_node(node, env);
-	return (restore_std_fds(saved_stdin, saved_stdout), g_signal_status);
+	return (restore_std_fds(saved_stdin, saved_stdout), g_signal_status % 256);
 }

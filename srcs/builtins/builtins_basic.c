@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/01 15:17:46 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	cd_builtin(char **args, t_env *env)
 	char	cwd[1024];
 	char	*path;
 
+	if (ft_tablen(args) > 2)
+		return (ft_putendl_fd("minishell: too many arguments", 2), 1);
 	if (!args[1] || !ft_strcmp(args[1], "~"))
 	{
 		path = get_env_value("HOME", env);
@@ -53,13 +55,13 @@ int	echo_builtin(char **args)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
+		printf("%s", args[i]);
 		if (args[i + 1])
-			ft_putstr_fd(" ", STDOUT_FILENO);
+			printf(" ");
 		i++;
 	}
 	if (!n)
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		printf("\n");
 	return (0);
 }
 
@@ -79,10 +81,9 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-int	exit_builtin(char **args)
+int	exit_builtin(char **args, t_env *env)
 {
-	long	code;
-
+	(void)env;
 	ft_putendl_fd("exit", 1);
 	if (!args[1])
 	{
@@ -94,14 +95,15 @@ int	exit_builtin(char **args)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		g_signal_status = 256;
-		return (255);
+		g_signal_status = 256 + 2;
+		return (2);
 	}
 	if (args[2])
 		return (ft_putendl_fd("minishell: exit: too many arguments", 2), 1);
-	code = ft_atoi(args[1]) % 256;
-	g_signal_status = 256;
-	return ((int)code);
+	g_signal_status = ft_atoi(args[1]);
+	g_signal_status = ((g_signal_status % 256) + 256) % 256;
+	g_signal_status = 256 + g_signal_status;
+	return (g_signal_status % 256);
 }
 
 int	pwd_builtin(void)

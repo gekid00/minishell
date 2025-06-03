@@ -1,50 +1,23 @@
-# Suppressions for readline library memory allocations
-# These are not leaks in our code but internal readline allocations
-
 {
-   readline_memory
-   Memcheck:Leak
-   match-leak-kinds:reachable
-   ...
-   obj:*/libreadline.so.*
+    ignore_libreadline_leaks
+    Memcheck:Leak
+    ...
+    obj:*/libreadline.so.*
 }
-
 {
-   readline_history
-   Memcheck:Leak
-   match-leak-kinds:reachable
-   ...
-   fun:add_history
+    ignore_bin_leaks
+    Memcheck:Leak
+    obj:/bin/*
 }
-
 {
-   tinfo_memory
-   Memcheck:Leak
-   match-leak-kinds:reachable
-   ...
-   obj:*/libtinfo.so.*
+    ignore_usr_bin_leaks
+    Memcheck:Leak
+    ...
+    obj:/usr/bin/*
 }
-
 {
-   ncurses_memory
-   Memcheck:Leak
-   match-leak-kinds:reachable
-   ...
-   obj:*/libncurses.so.*
-}
-
-{
-   readline_init
-   Memcheck:Leak
-   match-leak-kinds:reachable
-   ...
-   fun:readline
-}
-
-{
-   readline_tgetent
-   Memcheck:Leak
-   match-leak-kinds:reachable
-   ...
-   fun:tgetent*
+    leak add_history
+    Memcheck:Leak
+    ...
+    fun:add_history
 }
