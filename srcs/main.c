@@ -6,13 +6,51 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 03:19:35 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/05 02:45:40 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int		g_signal_status = 0;
+t_env	*g_env_cleanup = NULL;
+t_ast_node	*g_ast_cleanup = NULL;
+
+void	cleanup_on_exit(void)
+{
+	if (g_env_cleanup)
+	{
+		free_env(g_env_cleanup);
+		g_env_cleanup = NULL;
+	}
+	if (g_ast_cleanup)
+	{
+		free_ast(g_ast_cleanup);
+		g_ast_cleanup = NULL;
+	}
+	rl_clear_history();
+	// These readline cleanup functions may not be available on all systems
+	// rl_free_line_state();
+	// rl_cleanup_after_signal();
+}
+
+void	cleanup_child_process(void)
+{
+	// Clean up environment in child process before exiting
+	if (g_env_cleanup)
+	{
+		free_env(g_env_cleanup);
+		g_env_cleanup = NULL;
+	}
+	// Clean up AST in child process before exiting
+	if (g_ast_cleanup)
+	{
+		free_ast(g_ast_cleanup);
+		g_ast_cleanup = NULL;
+	}
+	// Clear readline history in child process
+	rl_clear_history();
+}
 
 void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast)
 {
@@ -22,6 +60,7 @@ void	clean_all(t_env *env, t_token *tokens, t_ast_node *ast)
 		free_tokens(tokens);
 	if (env)
 		free_env(env);
+	// Clear readline history more thoroughly
 	rl_clear_history();
 }
 
@@ -68,6 +107,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	exit_code = 0;
 	env = init_env(envp);
+	if (!env)
+		return (1);
+	g_env_cleanup = env;
+	atexit(cleanup_on_exit);
 	setup_signals();
 	while (1)
 	{
@@ -81,6 +124,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 	}
 	exit_code = get_exit_code();
+	g_env_cleanup = NULL; // Prevent double free in atexit
 	clean_all(env, NULL, NULL);
 	return (exit_code);
 }

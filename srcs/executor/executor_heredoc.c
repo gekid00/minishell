@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/05/12 15:21:18 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/05 02:19:04 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	heredoc_child_process(int *fd, t_redir *redir)
 		line = readline("> ");
 		if (!line || ft_strcmp(line, redir->file) == 0)
 		{
-			free(line);
+			if (line)
+				free(line);
 			break ;
 		}
 		write(fd[1], line, ft_strlen(line));
@@ -32,7 +33,10 @@ static int	heredoc_child_process(int *fd, t_redir *redir)
 		free(line);
 	}
 	close(fd[1]);
-	exit(0);
+	
+	// Clean up properly in child process before exiting
+	cleanup_child_process();
+	_exit(0);
 }
 
 int	handle_heredoc(t_redir *redir)

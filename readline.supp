@@ -5,19 +5,62 @@
     obj:*/libreadline.so.*
 }
 {
-    ignore_bin_leaks
-    Memcheck:Leak
-    obj:/bin/*
-}
-{
-    ignore_usr_bin_leaks
-    Memcheck:Leak
-    ...
-    obj:/usr/bin/*
-}
-{
-    leak add_history
+    ignore_readline_history
     Memcheck:Leak
     ...
     fun:add_history
+}
+{
+    ignore_readline_malloc
+    Memcheck:Leak
+    ...
+    fun:readline
+}
+{
+    ignore_readline_internal
+    Memcheck:Leak
+    ...
+    obj:*/libreadline.*
+}
+{
+    ignore_history_malloc
+    Memcheck:Leak
+    ...
+    fun:history_*
+}
+{
+    ignore_rl_malloc
+    Memcheck:Leak
+    ...
+    fun:rl_*
+}
+{
+    ignore_tgetent
+    Memcheck:Leak
+    ...
+    fun:tgetent
+}
+{
+    ignore_termcap
+    Memcheck:Leak
+    ...
+    obj:*/libtinfo.*
+}
+{
+    ignore_ncurses
+    Memcheck:Leak
+    ...
+    obj:*/libncurses.*
+}
+{
+    ignore_libc_dlopen
+    Memcheck:Leak
+    ...
+    fun:_dl_*
+}
+{
+    ignore_libc_malloc
+    Memcheck:Leak
+    ...
+    obj:/usr/lib/*/libc-*.so
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 11:48:53 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/05 02:19:04 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@
 # include <unistd.h>
 
 extern int	g_signal_status;
+extern t_env	*g_env_cleanup;
+extern t_ast_node	*g_ast_cleanup;
+
+void		cleanup_on_exit(void);
+void		cleanup_child_process(void);
 
 void		sigint_handler_no_print(int sig);
 void		printbanner(void);
