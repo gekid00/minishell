@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/06/05 02:19:04 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/05 10:00:24 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ static int	heredoc_child_process(int *fd, t_redir *redir)
 		free(line);
 	}
 	close(fd[1]);
-	
-	// Clean up properly in child process before exiting
 	cleanup_child_process();
 	_exit(0);
 }
@@ -63,7 +61,11 @@ int	handle_heredoc(t_redir *redir)
 	sig_handler(SIGUSR1);
 	setup_signals();
 	if ((status & 0x7f) == SIGINT)
+	{
+		close(fd[0]);
 		return (1);
+	}
 	dup2(fd[0], STDIN_FILENO);
-	return (close(fd[0]), 0);
+	close(fd[0]);
+	return (0);
 }

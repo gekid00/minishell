@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:40:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/05 02:19:04 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/05 10:13:04 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,14 @@ int	execute_ast(t_ast_node *node, t_env *env)
 {
 	if (!node)
 		return (0);
-	
-	// Store AST globally for child process cleanup
 	g_ast_cleanup = node;
-	
 	if (node->type == NODE_COMMAND)
 		g_signal_status = execute_command(node, env);
 	else if (node->type == NODE_PIPE)
 		g_signal_status = execute_pipe(node, env);
 	else
 		g_signal_status = 1;
-	
-	// Clear global reference after execution
 	g_ast_cleanup = NULL;
-	
 	return (g_signal_status % 256);
 }
 
@@ -55,6 +49,7 @@ int	execute_builtin(char **args, t_env *env)
 int	execute_command_node(t_ast_node *node, t_env *env)
 {
 	char	**args;
+	int		builtin_result;
 
 	args = node->args;
 	if (!args || !args[0])
@@ -71,8 +66,7 @@ int	execute_command_node(t_ast_node *node, t_env *env)
 	}
 	if (is_builtin(args[0]))
 	{
-		int builtin_result = execute_builtin(args, env);
-		// For exit command, preserve the special status and return it directly
+		builtin_result = execute_builtin(args, env);
 		if (g_signal_status >= 256)
 			return (g_signal_status);
 		g_signal_status = builtin_result;
@@ -87,27 +81,28 @@ int	execute_command(t_ast_node *node, t_env *env)
 	int		saved_stdin;
 	int		saved_stdout;
 	t_redir	*redirections;
+	int		result;
 
+	if (!node->redirects)
+		return (execute_command_node(node, env));
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (saved_stdin == -1 || saved_stdout == -1)
-		return (close_fd(saved_stdin, saved_stdout), 1);
+	{
+		close_fd(saved_stdin, saved_stdout);
+		return (1);
+	}
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
-		return (restore_std_fds(saved_stdin, saved_stdout), 1);
-	
-	// Execute command and handle exit special case
-	int result = execute_command_node(node, env);
-	
-	// If result is >= 256, it means it's an exit command, preserve it
+	{
+		restore_std_fds(saved_stdin, saved_stdout);
+		return (1);
+	}
+	result = execute_command_node(node, env);
 	if (result >= 256)
 		g_signal_status = result;
 	else if (g_signal_status < 256)
 		g_signal_status = result;
-	
-	// In pipe child processes, don't restore - they will exit anyway
-	// We can detect this by checking if stdout was redirected to a pipe
-	// But for simplicity, always restore for now
 	restore_std_fds(saved_stdin, saved_stdout);
 	return (g_signal_status % 256);
 }
@@ -115,12 +110,12 @@ int	execute_command(t_ast_node *node, t_env *env)
 int	execute_command_child(t_ast_node *node, t_env *env)
 {
 	t_redir	*redirections;
+	int		result;
 
 	redirections = node->redirects;
 	if (setup_redirections(redirections) != 0)
 		return (1);
-	int result = execute_command_node(node, env);
-	// If result is >= 256, it's an exit command, preserve it
+	result = execute_command_node(node, env);
 	if (result >= 256)
 		g_signal_status = result;
 	else
