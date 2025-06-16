@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 10:09:58 by gekido            #+#    #+#             */
-/*   Updated: 2025/04/17 21:51:39 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/16 21:03:51 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ long	len(long nb)
 	}
 	return (len);
 }
+
 char	*convert_int_to_char(char *str, long n, int i)
 {
 	str[i--] = '\0';

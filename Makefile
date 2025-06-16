@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+         #
+#    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/06/05 10:02:00 by reeer-aa         ###   ########.fr        #
+#    Updated: 2025/06/17 01:51:36 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,20 +25,29 @@ UTILS_DIR = $(SRC_DIR)/utils
 EXPAND_DIR = $(SRC_DIR)/expand
 
 SRCS	= $(SRC_DIR)/main.c \
+		$(SRC_DIR)/main_utils.c \
 		$(LEXER_DIR)/lexer.c \
 		$(LEXER_DIR)/lexer_words.c \
+		$(LEXER_DIR)/lexer_words_utils.c \
 		$(LEXER_DIR)/lexer_operators.c \
 		$(PARSER_DIR)/parser_core.c \
 		$(PARSER_DIR)/parser_utils.c \
+		$(PARSER_DIR)/parser_utils2.c \
 		$(PARSER_DIR)/parser_ast.c \
 		$(EXECUTOR_DIR)/executor_command.c \
+		$(EXECUTOR_DIR)/executor_command_utils.c \
 		$(EXECUTOR_DIR)/executor_heredoc.c \
 		$(EXECUTOR_DIR)/executor_external.c \
+		$(EXECUTOR_DIR)/executor_external_env.c \
+		$(EXECUTOR_DIR)/executor_external_utils.c \
+		$(EXECUTOR_DIR)/executor_external_helpers.c \
 		$(EXECUTOR_DIR)/executor_path.c \
 		$(EXECUTOR_DIR)/executor_redirections.c \
 		$(EXECUTOR_DIR)/executor_pipe.c \
 		$(BUILTINS_DIR)/builtins_basic.c \
+		$(BUILTINS_DIR)/builtins_basic_utils.c \
 		$(BUILTINS_DIR)/builtins_env.c \
+		$(BUILTINS_DIR)/builtins_env_utils.c \
 		$(BUILTINS_DIR)/builtins_utils.c \
 		$(BUILTINS_DIR)/builtins_export.c \
 		$(UTILS_DIR)/env_utils.c \
@@ -48,6 +57,7 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(UTILS_DIR)/cleanup.c \
 		$(EXPAND_DIR)/expand.c \
 		$(EXPAND_DIR)/expand_utils.c \
+		$(EXPAND_DIR)/expand_helpers.c \
 		$(EXPAND_DIR)/quote_removal.c \
 
 OBJS = $(SRCS:.c=.o)

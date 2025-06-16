@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:15 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/17 00:14:30 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,34 +53,13 @@ void	process_var_expansion(char *var_name, char **result, t_env *env)
 
 void	handle_dollar_sign(char *str, int *i, char **result, t_env *env)
 {
-	char	*var_name;
-	char	*temp;
-
 	(*i)++;
 	if (str[*i] == '?')
-	{
-		temp = ft_itoa(g_signal_status % 256);
-		if (temp)
-		{
-			*result = ft_strjoin_free(*result, temp);
-			free(temp);
-		}
-		(*i)++;
-		return ;
-	}
-	if (ft_isdigit(str[*i]))
-	{
-		(*i)++;
-		return ;
-	}
-	if (!ft_isalpha(str[*i]) && str[*i] != '_')
-		append_to_result(result, '$');
+		handle_exit_status(result, i);
+	else if (ft_isdigit(str[*i]))
+		handle_digit_variable(i);
 	else
-	{
-		var_name = extract_var_name(str, i);
-		if (var_name)
-			process_var_expansion(var_name, result, env);
-	}
+		handle_regular_variable(str, i, result, env);
 }
 
 char	*expand_variables(char *str, t_env *env)
@@ -98,10 +77,7 @@ char	*expand_variables(char *str, t_env *env)
 	in_double_quotes = false;
 	while (str[i])
 	{
-		if (str[i] == '\'' && !in_double_quotes)
-			in_single_quotes = !in_single_quotes;
-		else if (str[i] == '"' && !in_single_quotes)
-			in_double_quotes = !in_double_quotes;
+		update_quote_status(str[i], &in_single_quotes, &in_double_quotes);
 		if (str[i] == '$' && !in_single_quotes)
 			handle_dollar_sign(str, &i, &result, env);
 		else

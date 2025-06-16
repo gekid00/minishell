@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:35:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 01:40:25 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,6 @@ int	env_builtin(t_env *env)
 		i++;
 	}
 	return (0);
-}
-
-static char	**expand_env_tab(char **old, char *new_var, int size)
-{
-	char	**tab;
-	int		j;
-
-	tab = malloc(sizeof(char *) * (size + 2));
-	if (!tab)
-		return (NULL);
-	j = 0;
-	while (j < size)
-	{
-		tab[j] = old[j];
-		j++;
-	}
-	tab[size] = new_var;
-	tab[size + 1] = NULL;
-	return (tab);
 }
 
 int	unset_builtin(char **args, t_env *env)
@@ -72,16 +53,6 @@ int	unset_builtin(char **args, t_env *env)
 	return (0);
 }
 
-static int	key_len(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] && s[i] != '=')
-		i++;
-	return (i);
-}
-
 bool	is_valid_env_var_name(char *var)
 {
 	int	i;
@@ -109,34 +80,16 @@ void	add_env_var(t_env *env, char *var)
 	new = ft_strdup(var);
 	if (!is_valid_env_var_name(var))
 	{
-		ft_putstr_fd("minishell: export: `", 2);
-		ft_putstr_fd(var, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		g_signal_status = 1;
+		print_invalid_identifier_error(var);
 		free(new);
 		return ;
 	}
+	if (find_and_replace_env_var(env, var, new, klen))
+		return ;
 	i = 0;
 	while (env->vars[i])
-	{
-		if (ft_strncmp(env->vars[i], var, klen) == 0
-			&& (env->vars[i][klen] == '\0' || env->vars[i][klen] == '='))
-			return (free(env->vars[i]), env->vars[i] = new, (void)0);
 		i++;
-	}
 	tab = expand_env_tab(env->vars, new, i);
 	free(env->vars);
 	env->vars = tab;
-}
-
-void	update_env_var(t_env *env, char *key, char *value)
-{
-	char	*var;
-	char	*tmp;
-
-	tmp = ft_strjoin(key, "=");
-	var = ft_strjoin(tmp, value);
-	free(tmp);
-	add_env_var(env, var);
-	free(var);
 }

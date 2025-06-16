@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 00:56:19 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/21 16:25:08 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/16 21:03:51 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,35 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
+int	handle_word_token(char *input, int *i, t_token **tokens)
+{
+	char		*word;
+	t_token		*new_token;
+
+	word = get_word(input, i);
+	if (!word)
+		return (0);
+	if (word[0] != '\0')
+	{
+		new_token = create_token(TOKEN_WORD, word);
+		if (!new_token)
+		{
+			free(word);
+			return (0);
+		}
+		add_token(tokens, new_token);
+	}
+	free(word);
+	return (1);
+}
+
 t_token	*lexer(char *input)
 {
 	t_token	*tokens;
 	int		i;
-	char	*word;
-	t_token	*new_token;
 
+	if (!input)
+		return (NULL);
 	tokens = NULL;
 	i = 0;
 	while (input[i])
@@ -77,17 +99,8 @@ t_token	*lexer(char *input)
 			handle_operator(input, &i, &tokens);
 		else
 		{
-			word = get_word(input, &i);
-			if (!word)
+			if (!handle_word_token(input, &i, &tokens))
 				return (free_tokens(tokens), NULL);
-			if (word[0] != '\0')
-			{
-				new_token = create_token(TOKEN_WORD, word);
-				if (!new_token)
-					return (free(word), free_tokens(tokens), NULL);
-				add_token(&tokens, new_token);
-			}
-			free(word);
 		}
 	}
 	return (tokens);
