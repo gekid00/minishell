@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:39:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/16 21:03:51 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 
 typedef struct s_child_data
 {
-	char		*path;
-	char		**args;
-	char		**env_vars;
-}				t_child_data;
+	char				*path;
+	char				**args;
+	char				**env_vars;
+}						t_child_data;
 
 typedef struct s_env
 {
@@ -48,6 +48,9 @@ int						find_env_var_index(char **vars, char *var, int len);
 int						setup_redirections(t_redir *redirects, t_env *env);
 int						setup_redirection_in(t_redir *redir);
 int						setup_redirection_out(t_redir *redir);
+int						handle_heredoc_input(t_redir *redir, int fd,
+							int original_stdin);
+void					heredoc_signal_handler(int sig);
 int						setup_redirection_append(t_redir *redir);
 int						handle_heredoc(t_redir *redir, t_env *env);
 
@@ -90,5 +93,8 @@ int						is_valid_n_option(char *arg);
 
 void					setup_signals(void);
 void					sigint_handler(int sig);
+
+int						preprocess_heredocs_in_node(t_ast_node *node);
+void					cleanup_temp_files(t_ast_node *node);
 
 #endif

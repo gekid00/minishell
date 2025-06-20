@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/20 23:45:43 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	handle_dot_command(char **args)
 	}
 	if (args[0][0] == '.' && args[0][1] == '.')
 	{
-		ft_putstr_fd("minishell: command not found: ", 2);
-		ft_putendl_fd(args[0], 2);
+		ft_putstr_fd(args[0], 2);
+		ft_putendl_fd(": command not found", 2);
 		return (127);
 	}
 	return (0);

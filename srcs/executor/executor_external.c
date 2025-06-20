@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_external.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:55:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/20 16:06:56 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	minimal_child_process(t_child_data *data, t_env *env)
 	{
 		ft_putstr_fd("minishell: error executing: ", 2);
 		ft_putendl_fd(data->args[0], 2);
+		free_child_data(data);
 		exit(126);
 	}
 }

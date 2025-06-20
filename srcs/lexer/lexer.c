@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 00:56:19 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/16 21:03:51 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/17 13:59:09 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	free_tokens(t_token *tokens)
 
 int	handle_word_token(char *input, int *i, t_token **tokens)
 {
-	char		*word;
-	t_token		*new_token;
+	char	*word;
+	t_token	*new_token;
 
 	word = get_word(input, i);
 	if (!word)
@@ -88,6 +88,8 @@ t_token	*lexer(char *input)
 	int		i;
 
 	if (!input)
+		return (NULL);
+	if (validate_quotes(input))
 		return (NULL);
 	tokens = NULL;
 	i = 0;

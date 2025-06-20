@@ -6,12 +6,11 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/20 23:56:19 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <errno.h>
 
 void	free_child_data(t_child_data *data)
 {
@@ -34,9 +33,12 @@ void	handle_child_process(t_child_data *data)
 	signal(SIGQUIT, SIG_DFL);
 	if (execve(data->path, data->args, data->env_vars) == -1)
 	{
-		result = 127;
-		if (errno == EACCES)
+		if (access(data->path, F_OK) == -1)
+			result = 127;
+		else if (access(data->path, X_OK) == -1)
 			result = 126;
+		else
+			result = 127;
 		free_child_data(data);
 		exit(result);
 	}

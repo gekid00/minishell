@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:13:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/20 23:56:19 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,34 +54,34 @@ t_redir	*append_redirections(t_redir *list, t_redir *new)
 	return (list);
 }
 
-t_redir	*create_and_append_redirection(t_redir *redirects, t_token *token)
+void	print_syntax_error(t_token *token)
 {
-	t_redir	*new_redir;
-
-	new_redir = create_redirection(token->type, token->next->value);
-	if (!new_redir)
-		return (NULL);
-	return (append_redirections(redirects, new_redir));
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	if (token && token->value)
+		ft_putstr_fd(token->value, 2);
+	else
+		ft_putstr_fd("newline", 2);
+	ft_putendl_fd("'", 2);
+	g_signal_status = 2;
 }
 
-t_redir	*parse_redirections(t_token **token)
+int	check_redirection_syntax(t_token *redir_token)
 {
-	t_redir	*redirects;
-
-	redirects = NULL;
-	while (*token && (*token)->type != TOKEN_PIPE)
+	if (!redir_token->next)
 	{
-		if (is_redirection((*token)->type))
-		{
-			if (!(*token)->next || (*token)->next->type != TOKEN_WORD)
-				return (free_redirections(redirects), NULL);
-			redirects = create_and_append_redirection(redirects, *token);
-			if (!redirects)
-				return (free_redirections(redirects), NULL);
-			*token = (*token)->next->next;
-		}
-		else
-			*token = (*token)->next;
+		print_syntax_error(NULL);
+		return (1);
 	}
-	return (redirects);
+	if (redir_token->type == TOKEN_HEREDOC
+		&& is_redirection(redir_token->next->type))
+	{
+		print_syntax_error(redir_token->next);
+		return (1);
+	}
+	if (redir_token->next->type != TOKEN_WORD)
+	{
+		print_syntax_error(redir_token->next);
+		return (1);
+	}
+	return (0);
 }

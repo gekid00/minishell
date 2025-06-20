@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:15:10 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/16 21:03:51 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,6 @@ void	close_fd(int fd1, int fd2)
 		close(fd2);
 }
 
-void	handle_direct_path_error(char *cmd)
-{
-	if (access(cmd, F_OK) == 0)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": Permission denied", 2);
-		g_signal_status = 126;
-	}
-	else
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		g_signal_status = 127;
-	}
-}
-
 int	is_unknown_cmd(t_token *tokens, t_env *env)
 {
 	char	*path;
@@ -63,8 +45,8 @@ int	is_unknown_cmd(t_token *tokens, t_env *env)
 			handle_direct_path_error(cmd);
 		else
 		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putendl_fd(cmd, 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putendl_fd(": command not found", 2);
 			g_signal_status = 127;
 		}
 		return (1);

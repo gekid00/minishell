@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:10:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/23 14:52:38 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,18 @@ t_ast_node	*parse_command(t_token **token)
 		return (NULL);
 	*token = temp_token;
 	redirects = parse_redirections(token);
+	if (redirects == NULL && has_redirection_tokens(temp_token))
+	{
+		if (args)
+			free_args(args);
+		return (NULL);
+	}
 	return (create_command_node(args, redirects));
 }
 
 t_ast_node	*parser(t_token *tokens)
 {
 	t_ast_node	*left;
-	t_ast_node	*right;
 
 	if (!tokens)
 		return (NULL);
@@ -74,15 +79,6 @@ t_ast_node	*parser(t_token *tokens)
 	if (!left)
 		return (NULL);
 	if (is_pipe_token(tokens))
-	{
-		skip_to_next_token(&tokens, 1);
-		right = parser(tokens);
-		if (!right)
-		{
-			free_ast(left);
-			return (NULL);
-		}
-		return (create_pipe_node(left, right));
-	}
+		return (handle_pipe_parsing(left, &tokens));
 	return (left);
 }

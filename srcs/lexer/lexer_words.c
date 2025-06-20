@@ -3,14 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_words.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:05:54 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 12:00:00 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/17 13:59:54 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	validate_quotes(char *input)
+{
+	int		i;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
+
+	if (!input)
+		return (0);
+	i = 0;
+	in_single_quotes = false;
+	in_double_quotes = false;
+	while (input[i])
+	{
+		if (input[i] == '\'' && !in_double_quotes)
+			in_single_quotes = !in_single_quotes;
+		else if (input[i] == '"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		i++;
+	}
+	if (in_single_quotes || in_double_quotes)
+	{
+		ft_putendl_fd("minishell: syntax error: unmatched quotes", 2);
+		return (1);
+	}
+	return (0);
+}
 
 int	should_stop_word(char *input, int i)
 {

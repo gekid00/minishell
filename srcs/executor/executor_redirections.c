@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redirections.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:05:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/16 13:38:13 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/20 23:45:43 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	setup_redirection_out(t_redir *redir)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(redir->file, 2);
-		ft_putendl_fd(": Cannot open file", 2);
+		ft_putendl_fd(": Permission denied", 2);
 		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
@@ -63,7 +63,7 @@ int	setup_redirection_append(t_redir *redir)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(redir->file, 2);
-		ft_putendl_fd(": Cannot open file", 2);
+		ft_putendl_fd(": Permission denied", 2);
 		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
@@ -80,6 +80,7 @@ int	setup_redirections(t_redir *redirects, t_env *env)
 	int	result;
 
 	result = 0;
+	(void)env;
 	while (redirects && result == 0)
 	{
 		if (redirects->type == TOKEN_REDIR_IN)
@@ -88,8 +89,6 @@ int	setup_redirections(t_redir *redirects, t_env *env)
 			result = setup_redirection_out(redirects);
 		else if (redirects->type == TOKEN_APPEND)
 			result = setup_redirection_append(redirects);
-		else if (redirects->type == TOKEN_HEREDOC)
-			result = handle_heredoc(redirects, env);
 		redirects = redirects->next;
 	}
 	return (result);

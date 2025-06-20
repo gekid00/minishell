@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:05 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/01 10:50:14 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ t_ast_node				*parse_command(t_token **token);
 t_redir					*parse_redirections(t_token **token);
 t_redir					*append_redirections(t_redir *list, t_redir *new);
 int						is_redirection(t_token_type type);
+void					print_syntax_error(t_token *token);
+t_ast_node				*handle_pipe_parsing(t_ast_node *left,
+							t_token **tokens);
+int						check_redirection_syntax(t_token *redir_token);
+int						has_redirection_tokens(t_token *token);
 
 t_ast_node				*create_command_node(char **args, t_redir *redirects);
 t_ast_node				*create_pipe_node(t_ast_node *left, t_ast_node *right);

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:49:38 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "expand.h"
 # include "lexer.h"
 # include "parser.h"
+# include "colors.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -27,14 +28,21 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int	g_signal_status;
+typedef struct s_env		t_env;
+typedef struct s_child_data	t_child_data;
+typedef struct s_token		t_token;
+typedef struct s_ast_node	t_ast_node;
+
+extern int					g_signal_status;
 
 void			cleanup_on_exit(t_env *env);
 void			cleanup_child_process(t_env *env);
 
+char			*read_line_non_interactive(void);
 void			sigint_handler_no_print(int sig);
 void			printbanner(void);
 int				handle_input(char *input, char **envp);
@@ -48,6 +56,7 @@ int				check_unknown_command(t_token *first_non_empty, t_env *env);
 void			close_fd(int fd1, int fd2);
 void			clean_all(t_env *env, t_token *tokens, t_ast_node *ast);
 int				is_unknown_cmd(t_token *tokens, t_env *env);
+void			handle_direct_path_error(char *cmd);
 char			**expand_env_tab(char **old, char *new_var, int size);
 void			print_invalid_identifier_error(char *var);
 int				find_and_replace_env_var(t_env *env, char *var, char *new,
@@ -67,7 +76,7 @@ int				handle_dot_command(char **args);
 int				execute_builtin_safe(char **args, t_env *env);
 int				setup_command_redirections(t_ast_node *node, t_env *env);
 void			update_exit_status(int result);
-/* executor_external_utils.c */
+
 void			free_child_data(t_child_data *data);
 char			**allocate_and_copy_args(char **node_args);
 t_child_data	*init_child_data(void);
@@ -79,10 +88,10 @@ void			free_partial_env(char **dup_env, int count);
 char			**allocate_env_array(int count);
 void			free_array(char **arr);
 char			**convert_env_to_array(t_env *env);
-/* parser_utils2.c */
+
 char			**extract_args_safe(t_token **token, int count);
 int				is_redirection(t_token_type type);
-/* lexer_words_utils.c */
+
 void			append_quote_to_word(char **word, char quote);
 void			append_quoted_content(char *input, int *i, char **word,
 					char quote);

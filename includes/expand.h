@@ -6,13 +6,14 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:21:57 by gekido            #+#    #+#             */
-/*   Updated: 2025/05/27 14:20:14 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:31:58 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_H
 # define EXPAND_H
 
+# include "lexer.h"
 # include "minishell.h"
 
 typedef struct s_env	t_env;

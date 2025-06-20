@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 01:08:55 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/16 21:03:51 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/21 00:50:22 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,23 @@ void	handle_command(char *input, t_env *env)
 int	run_minishell_loop(t_env *env)
 {
 	char	*input;
+	char	*prompt;
 
 	while (1)
 	{
-		input = readline("minishell$ ");
+		prompt = get_colored_prompt(env);
+		if (!prompt)
+			prompt = ft_strdup("minishell$ ");
+		input = readline(prompt);
+		free(prompt);
 		if (!input)
 		{
 			printf("exit\n");
 			break ;
 		}
 		if (!process_input(input, env))
+			break ;
+		if (should_exit())
 			break ;
 	}
 	return (get_exit_code());
@@ -74,12 +81,16 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	if (isatty(0) == 0 || isatty(1) != 1 || isatty(2) != 1)
+	{
+		printf("Erreur.\n");
+		return (EXIT_FAILURE);
+	}
 	env = init_env(envp);
 	if (!env)
 		return (1);
 	setup_signals();
 	exit_code = run_minishell_loop(env);
-	cleanup_on_exit(env);
 	free_env(env);
 	rl_clear_history();
 	return (exit_code);
