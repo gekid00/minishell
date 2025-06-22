@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 00:14:30 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/21 14:47:08 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*get_cd_path(char **args, t_env *env, int *should_free)
 			ft_putendl_fd("minishell: cd: HOME not set", 2);
 			return (NULL);
 		}
-		*should_free = 0;
+		*should_free = 1;
 	}
 	else
 	{
