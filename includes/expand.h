@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:21:57 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/19 10:31:58 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/25 00:03:57 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_H
 # define EXPAND_H
 
+# include <stdbool.h>
 # include "lexer.h"
 # include "minishell.h"
 
@@ -29,5 +30,7 @@ void					process_var_expansion(char *var_name, char **result,
 							t_env *env);
 void					handle_dollar_sign(char *str, int *i, char **result,
 							t_env *env);
+void					handle_quote_char(char *str, int *i, bool *in_single,
+							bool *in_double);
 
 #endif

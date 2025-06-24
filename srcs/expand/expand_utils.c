@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 01:39:02 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/03 03:26:58 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/25 00:04:19 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,40 @@ void	expand_token_variables(t_token *tokens, t_env *env)
 		}
 		cur = cur->next;
 	}
+}
+
+void	copy_regular_char(char *str, char *result, int *i, int *j)
+{
+	result[*j] = str[*i];
+	(*j)++;
+	(*i)++;
+}
+
+char	*remove_quotes(char *str)
+{
+	char	*result;
+	int		i;
+	int		j;
+	bool	in_single_quotes;
+	bool	in_double_quotes;
+
+	if (!str)
+		return (NULL);
+	result = malloc(ft_strlen(str) + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	in_single_quotes = false;
+	in_double_quotes = false;
+	while (str[i])
+	{
+		if ((str[i] == '\'' && !in_double_quotes)
+			|| (str[i] == '"' && !in_single_quotes))
+			handle_quote_char(str, &i, &in_single_quotes, &in_double_quotes);
+		else
+			copy_regular_char(str, result, &i, &j);
+	}
+	result[j] = '\0';
+	return (result);
 }

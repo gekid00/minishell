@@ -6,7 +6,7 @@
 #    By: gekido <gekido@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/04 00:13:59 by gekido            #+#    #+#              #
-#    Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr        #
+#    Updated: 2025/06/25 00:02:18 by gekido           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,15 +33,12 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(PARSER_DIR)/parser_core.c \
 		$(PARSER_DIR)/parser_utils.c \
 		$(PARSER_DIR)/parser_utils2.c \
-		$(PARSER_DIR)/parser_utils3.c \
-		$(PARSER_DIR)/parser_utils4.c \
 		$(PARSER_DIR)/parser_ast.c \
+		$(PARSER_DIR)/parser_redirections.c \
 		$(EXECUTOR_DIR)/executor_command.c \
 		$(EXECUTOR_DIR)/executor_command_utils.c \
 		$(EXECUTOR_DIR)/executor_heredoc.c \
 		$(EXECUTOR_DIR)/executor_heredoc_pre.c \
-		$(EXECUTOR_DIR)/executor_heredoc_utils.c \
-		$(EXECUTOR_DIR)/executor_heredoc_utils2.c \
 		$(EXECUTOR_DIR)/executor_external.c \
 		$(EXECUTOR_DIR)/executor_external_env.c \
 		$(EXECUTOR_DIR)/executor_external_utils.c \
@@ -53,21 +50,18 @@ SRCS	= $(SRC_DIR)/main.c \
 		$(BUILTINS_DIR)/builtins_basic_utils.c \
 		$(BUILTINS_DIR)/builtins_env.c \
 		$(BUILTINS_DIR)/builtins_env_utils.c \
-		$(BUILTINS_DIR)/builtins_utils.c \
 		$(BUILTINS_DIR)/builtins_export.c \
+		$(BUILTINS_DIR)/builtins_utils.c \
 		$(UTILS_DIR)/env_utils.c \
 		$(UTILS_DIR)/signals.c \
 		$(UTILS_DIR)/utils.c \
-		$(UTILS_DIR)/utils2.c \
-		$(UTILS_DIR)/utils3.c \
+		$(UTILS_DIR)/utils_error.c \
 		$(UTILS_DIR)/cleanup.c \
 		$(UTILS_DIR)/colors.c \
-		$(UTILS_DIR)/prompt_builder.c \
-		$(UTILS_DIR)/prompt_utils.c \
+		$(UTILS_DIR)/prompt.c \
 		$(EXPAND_DIR)/expand.c \
 		$(EXPAND_DIR)/expand_utils.c \
 		$(EXPAND_DIR)/expand_helpers.c \
-		$(EXPAND_DIR)/quote_removal.c \
 
 OBJS = $(SRCS:.c=.o)
 

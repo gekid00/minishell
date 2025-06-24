@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:53:41 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/06/18 10:56:19 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/06/25 00:05:18 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,55 @@ int	handle_heredoc(t_redir *redir, t_env *env)
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 	return (status);
+}
+
+static int	check_heredoc_line(char *line, t_redir *redir, int original_stdin)
+{
+	if (!line)
+	{
+		if (g_signal_status == 130)
+		{
+			dup2(original_stdin, STDIN_FILENO);
+			return (1);
+		}
+		return (2);
+	}
+	if (g_signal_status == 130)
+	{
+		free(line);
+		dup2(original_stdin, STDIN_FILENO);
+		return (1);
+	}
+	if (ft_strcmp(line, redir->file) == 0)
+	{
+		free(line);
+		return (2);
+	}
+	return (0);
+}
+
+int	handle_heredoc_input(t_redir *redir, int fd, int original_stdin)
+{
+	char	*line;
+	int		saved_status;
+	int		check_result;
+
+	saved_status = g_signal_status;
+	g_signal_status = 0;
+	signal(SIGINT, heredoc_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+	while (1)
+	{
+		line = readline("> ");
+		check_result = check_heredoc_line(line, redir, original_stdin);
+		if (check_result == 1)
+			return (1);
+		if (check_result == 2)
+			break ;
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	g_signal_status = saved_status;
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 12:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/25 00:02:18 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,23 @@ char	**extract_args_safe(t_token **token, int count)
 	return (args);
 }
 
-int	is_redirection(t_token_type type)
+t_ast_node	*handle_pipe_parsing(t_ast_node *left, t_token **tokens)
 {
-	return (type == TOKEN_REDIR_OUT || type == TOKEN_REDIR_IN
-		|| type == TOKEN_APPEND || type == TOKEN_HEREDOC);
+	t_ast_node	*right;
+
+	skip_to_next_token(tokens, 1);
+	if (!*tokens)
+	{
+		print_syntax_error(NULL);
+		free_ast(left);
+		return (NULL);
+	}
+	right = parser(*tokens);
+	if (!right)
+	{
+		print_syntax_error(NULL);
+		free_ast(left);
+		return (NULL);
+	}
+	return (create_pipe_node(left, right));
 }

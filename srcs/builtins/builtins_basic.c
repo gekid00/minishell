@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_basic.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:30:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/21 14:47:08 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:31:26 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ int	cd_builtin(char **args, t_env *env)
 	int		should_free;
 
 	if (ft_tablen(args) > 2)
-		return (ft_putendl_fd("minishell: too many arguments", 2), 1);
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(args[1], 2);
+		return (ft_putendl_fd(": too many arguments", 2), 1);
+	}
 	path = get_cd_path(args, env, &should_free);
 	if (!path)
 		return (1);

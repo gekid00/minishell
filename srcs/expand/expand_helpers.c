@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 00:14:30 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/25 00:02:18 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,18 @@ void	update_quote_status(char c, bool *in_single, bool *in_double)
 		*in_single = !*in_single;
 	else if (c == '"' && !*in_single)
 		*in_double = !*in_double;
+}
+
+void	handle_quote_char(char *str, int *i, bool *in_single, bool *in_double)
+{
+	if (str[*i] == '\'' && !*in_double)
+	{
+		*in_single = !*in_single;
+		(*i)++;
+	}
+	else if (str[*i] == '"' && !*in_single)
+	{
+		*in_double = !*in_double;
+		(*i)++;
+	}
 }

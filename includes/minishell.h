@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:04:08 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/21 00:57:12 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/23 11:00:48 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			clean_all(t_env *env, t_token *tokens, t_ast_node *ast);
 int				is_unknown_cmd(t_token *tokens, t_env *env);
 void			handle_direct_path_error(char *cmd);
 char			**expand_env_tab(char **old, char *new_var, int size);
-void			print_invalid_identifier_error(char *var);
+void			print_invalid(char *var);
 int				find_and_replace_env_var(t_env *env, char *var, char *new,
 					int klen);
 int				key_len(const char *s);

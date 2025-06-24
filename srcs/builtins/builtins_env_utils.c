@@ -6,7 +6,7 @@
 /*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/17 01:03:16 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/25 00:16:11 by gekido           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,6 @@ void	update_env_var(t_env *env, char *key, char *value)
 	free(var);
 }
 
-void	print_invalid_identifier_error(char *var)
-{
-	ft_putstr_fd("minishell: export: `", 2);
-	ft_putstr_fd(var, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-	g_signal_status = 1;
-}
-
 int	find_and_replace_env_var(t_env *env, char *var, char *new, int klen)
 {
 	int	i;
@@ -78,4 +70,24 @@ int	find_and_replace_env_var(t_env *env, char *var, char *new, int klen)
 		i++;
 	}
 	return (0);
+}
+
+void	allocate_new_env(t_env *env, char *var)
+{
+	int		i;
+	char	**new_vars;
+
+	i = 0;
+	while (env->vars[i])
+		i++;
+	new_vars = malloc(sizeof(char *) * (i + 2));
+	if (!new_vars)
+		return ;
+	i = -1;
+	while (env->vars[++i])
+		new_vars[i] = env->vars[i];
+	new_vars[i] = ft_strdup(var);
+	new_vars[i + 1] = NULL;
+	free(env->vars);
+	env->vars = new_vars;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_command_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gekido <gekido@student.42.fr>              +#+  +:+       +#+        */
+/*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:00:00 by gekido            #+#    #+#             */
-/*   Updated: 2025/06/20 23:45:43 by gekido           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:06:51 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ int	handle_dot_command(char **args)
 {
 	if (ft_strcmp(args[0], ".") == 0)
 	{
+		ft_putstr_fd("minishell: ", 2);
 		ft_putendl_fd(".: filename argument required", 2);
 		ft_putendl_fd(".: usage: . filename [arguments]", 2);
 		return (2);
 	}
 	if (args[0][0] == '.' && args[0][1] == '.')
 	{
+		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(args[0], 2);
 		ft_putendl_fd(": command not found", 2);
 		return (127);
